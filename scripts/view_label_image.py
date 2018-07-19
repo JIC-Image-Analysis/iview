@@ -1,10 +1,12 @@
 import sys
 from vispy import scene
+from vispy.scene.visuals import Text
 from vispy import app
 import numpy as np
 
 from imageio import imread
 
+import click
 
 colors = {
     1: [255, 0, 0],
@@ -22,23 +24,27 @@ canvas.show()
 # Set up a viewbox to display the image with interactive pan/zoom
 view = canvas.central_widget.add_view()
 
-# Create the image
-# img_data = np.random.normal(size=(100, 100, 3), loc=128,
-#                             scale=50).astype(np.ubyte)
-img_data = imread('data/fixed_mask_1.png')
-xdim, ydim = img_data.shape
 
-im = np.zeros((xdim, ydim, 3), dtype=np.uint8)
-for k, v in colors.items():
-    im[np.where(img_data == k)] = v
-image = scene.visuals.Image(im, parent=view.scene)
+@click.command()
+@click.argument('image_fpath')
+def main(image_fpath):
+    img_data = imread(image_fpath)
+    xdim, ydim = img_data.shape
 
-# Set 2D camera (the camera will scale to the contents in the scene)
-view.camera = scene.PanZoomCamera(aspect=1)
-view.camera.set_range()
-view.camera.flip = (False, True, False)
+    im = np.zeros((xdim, ydim, 3), dtype=np.uint8)
+    for k, v in colors.items():
+        im[np.where(img_data == k)] = v
+    image = scene.visuals.Image(im, parent=view.scene)
 
+    t1 = scene.visuals.Text('Text in root scene (24 pt)', parent=image, color='red', pos=(100,100))
+    t1.font_size = 24
+    # Set 2D camera (the camera will scale to the contents in the scene)
+    view.camera = scene.PanZoomCamera(aspect=1)
+    view.camera.set_range()
+    view.camera.flip = (False, True, False)
 
-
-if __name__ == '__main__' and sys.flags.interactive == 0:
     app.run()
+
+
+if __name__ == '__main__':
+    main()
