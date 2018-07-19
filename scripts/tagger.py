@@ -31,6 +31,9 @@ def key_event(event):
     try:
         im, app.current_id = next(app.image_generator)
         app.image.set_data(im)
+        app.counter += 1
+        textstr = "Image {}".format(app.counter)
+        app.t1.text = textstr
         canvas.update()
     except StopIteration:
         app.dataset.put_overlay("classes", app.tags)
@@ -55,6 +58,12 @@ def main(dataset_uri):
 
     im, app.current_id = next(app.image_generator)
     app.image = scene.visuals.Image(im, parent=view.scene)
+
+    app.counter = 0
+    textstr = "Image {}".format(app.counter)
+    t1 = scene.visuals.Text(textstr, parent=app.image, color='red', pos=(30,5))
+    t1.font_size = 24
+    app.t1 = t1
 
     view.camera = scene.PanZoomCamera(aspect=1)
     view.camera.set_range()
