@@ -23,6 +23,7 @@ key_to_tag = {
     'P': 'emerged'
 }
 
+
 @canvas.events.key_press.connect
 def key_event(event):
 
