@@ -11,7 +11,7 @@ dtool-azure==0.3.0
 dtoolcore==3.4.1
 idna==2.7
 imageio==2.3.0
-numpy==1.15.0
+numpy==1.22.0
 Pillow==5.2.0
 pycparser==2.18
 PyQt5==5.11.2
